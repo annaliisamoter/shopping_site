@@ -60,6 +60,26 @@ def show_melon(melon_id):
 def show_shopping_cart():
     """Display content of shopping cart."""
 
+    cart_dict = session['cart']
+
+    cart_list = []
+    running_tally = 0
+
+    for melon_id in cart_dict:
+        melon = melons.get_by_id(melon_id)
+        melon.count = cart_dict[melon_id]
+
+        melon_total = melon.price * melon.count
+
+        melon.total = melon_total
+        cart_list.append(melon)
+        running_tally = running_tally + melon_total
+
+
+    return render_template("/cart.html", cart_list=cart_list,
+                           running_tally=running_tally)
+
+
     # TODO: Display the contents of the shopping cart.
 
     # The logic here will be something like:
@@ -112,30 +132,35 @@ def add_to_cart(melon_id):
 
     flash("Your melon has been added.")
 
-    print session['cart']
+    print "this is the session cart", session['cart']
 
     return redirect("/cart")
 
 
-@app.route("/cart")
-def show_cart():
-    """Display the cart"""
+# @app.route("/cart")
+# def show_cart():
+#     """Display the cart"""
 
-    cart_dict = session['cart']
+#     pass
 
-    cart_list = {}
+    # cart_list = []
 
-    running_tally = 0
+    # running_tally = 0
 
-    for melon_id in cart_dict:
-        melon = get_by_id(melon_id)
-        cart_list[melon] = cart_dict[melon_id]
-        melon_price = melon.price
-        melon_total = melon_price * cart_dict[melon_id]
-        running_tally = running_tally + melon_total
+    # for melon_id in cart_dict:
+    #     melon = get_by_id(melon_id)
+    #     melon['count'] = cart_dict[melon_id]
+    #     melon_price = melon.price
+    #     melon_total = melon_price * melon.count
+    #     melon['total'] = melon_total
+    #     cart_list.append(melon)
+    #     running_tally = running_tally + melon_total
 
-    return render_template("/cart.html", cart_list=cart_list,
-                            running_tally=running_tally)
+    # print cart_list
+
+    # return render_template("/cart.html", cart_list=cart_list,
+    #                        running_tally=running_tally)
+
 
 @app.route("/login", methods=["GET"])
 def show_login():

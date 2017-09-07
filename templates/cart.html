@@ -3,46 +3,38 @@
 
 {% block body %}
 
+    {% if cart_list %}
+
     <table class="table table-striped">
         <thead>
         <tr>
-            {% for melon in cart_list %}
-            <th>{{ melon.common_name }} </th>
+            <th>Melon Type</th>
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
         </tr>
         </thead>
         <tbody>
+            {% for melon in cart_list %}
         <tr>
-            <td>Ancient Watermelon</td>
-            <td>5</td>
-            <td>$3.00</td>
-            <td>$15.00</td>
-        </tr>
-        <tr>
-            <td>Charleston Gray</td>
-            <td>2</td>
-            <td>$2.00</td>
-            <td>$4.00</td>
-        </tr>
-        <tr>
-            <td>Crenshaw</td>
-            <td>1</td>
-            <td>$2.00</td>
-            <td>$2.00</td>
-        </tr>
-        <tr>
-            <td>Ledmon Watermelon</td>
-            <td>2</td>
-            <td>$3.00</td>
-            <td>$6.00</td>
+            <td>{{ melon.common_name }}</td>
+            <td>{{ melon.count }}</td>
+            <td>${{ '%0.2f'| format(melon.price) }}</td>
+            <td>${{ '%0.2f'| format(melon.total) }}</td>
+            {% endfor %}
         </tr>
         </tbody>
     </table>
 
-    <h3>Total: $27.00</h3>
+    <h3>Total: ${{ '%0.2f'| format(running_tally) }}</h3>
 
     <a href="/checkout" class="btn btn-large btn-primary">Check Out</a>
+    {% endif %}
+
+    {% else %}
+
+    <h1>"Your cart is empty"</h1>
+
+    {% endelse% }
 
 {% endblock %}
